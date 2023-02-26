@@ -36,6 +36,10 @@ class ArticlesController extends AbstractController
             throw new UnauthorizedException();
         }
 
+        if (!$this->user->isAdmin()) {
+            throw new ForbiddenException('Статьи могут редактировать только администраторы');
+        }
+
         if (!empty($_POST)) {
             try {
                 $article->updateFromArray($_POST);
