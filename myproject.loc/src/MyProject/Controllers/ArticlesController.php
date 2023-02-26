@@ -5,6 +5,7 @@ namespace MyProject\Controllers;
 use MyProject\Exceptions\InvalidArgumentException;
 use MyProject\Exceptions\NotFoundException;
 use MyProject\Exceptions\UnauthorizedException;
+use MyProject\Exceptions\ForbiddenException;
 use MyProject\Models\Articles\Article;
 use MyProject\Models\Users\User;
 
@@ -54,6 +55,9 @@ class ArticlesController extends AbstractController
     {
         if ($this->user === null) {
             throw new UnauthorizedException();
+        }
+        if (!$this->user->isAdmin()) {
+            throw new ForbiddenException('Статьи могут добавлять только администраторы');
         }
 
         if (!empty($_POST)) {
